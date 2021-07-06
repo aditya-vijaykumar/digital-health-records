@@ -94,30 +94,27 @@ public class App extends Application {
                 Connection con = null;
                 Statement stmt = null;
                 try {
-
-                    con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/JDBC1", "root", "");
+                    con = DriverManager.getConnection("jdbc:mysql://remotemysql.com:3306/6jf8B9VQl4", "root", "");
                     stmt = con.createStatement();
                     System.out.println("Inserting the values into table");
-                    String upqry = "INSERT INTO AUTHORS  VALUES('" + str1 + "', '" + str2 + "');";
+                    String upqry = "INSERT INTO Authors VALUES('" + str1 + "', '" + str2 + "');";
                     int row = stmt.executeUpdate(upqry);
                     System.out.println("Inserting the values into table");
 
                 } catch (Exception e) {
-                    System.out.println("Exception caught");
+                    System.out.println("Exception caught" + e.toString());
                 }
             }
         });
 
         b2.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
             public void handle(ActionEvent ae) {
-                String str1 = tf1.getText();
-                String str2 = tf2.getText();
                 Connection con = null;
                 Statement stmt = null;
                 try {
-                    con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/JDBC1", "root", "");
+                    con = DriverManager.getConnection("jdbc:mysql://remotemysql.com:3306/6jf8B9VQl4", "6jf8B9VQl4", "T1a7u4LCMY");
                     stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM AUTHORS");
+                    ResultSet rs = stmt.executeQuery("SELECT * FROM Authors");
 
                     data.clear();
                     while (rs.next()) {
@@ -126,7 +123,7 @@ public class App extends Application {
                     }
                     table.setItems(data);
                 } catch (Exception e) {
-                    System.out.println("Exception caught");
+                    System.out.println("Exception caught" + e.toString());
                 }
             }
         });
