@@ -1,8 +1,4 @@
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.sql.*;
-
 import javafx.application.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -13,17 +9,12 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -70,7 +61,6 @@ public class App extends Application {
         subroot2.setMaxWidth(300);
 
         Separator separator = new Separator();
-        // Region spacer = new Region();
         separator.setPrefWidth(300);
         Button b1 = new Button("Insert Data");
         Button b2 = new Button("Show Data");
@@ -98,7 +88,7 @@ public class App extends Application {
                     stmt = con.createStatement();
                     System.out.println("Inserting the values into table");
                     String upqry = "INSERT INTO Authors VALUES('" + str1 + "', '" + str2 + "');";
-                    int row = stmt.executeUpdate(upqry);
+                    stmt.executeUpdate(upqry);
                     System.out.println("Inserting the values into table");
 
                 } catch (Exception e) {
@@ -112,7 +102,8 @@ public class App extends Application {
                 Connection con = null;
                 Statement stmt = null;
                 try {
-                    con = DriverManager.getConnection("jdbc:mysql://remotemysql.com:3306/6jf8B9VQl4", "6jf8B9VQl4", "T1a7u4LCMY");
+                    con = DriverManager.getConnection("jdbc:mysql://remotemysql.com:3306/6jf8B9VQl4", "6jf8B9VQl4",
+                            "T1a7u4LCMY");
                     stmt = con.createStatement();
                     ResultSet rs = stmt.executeQuery("SELECT * FROM Authors");
 
@@ -151,17 +142,8 @@ public class App extends Application {
             return authorName.get();
         }
 
-        public void setAuthorName(String aName) {
-            authorName.set(aName);
-        }
-
         public String getBookName() {
             return bookName.get();
         }
-
-        public void setBookName(String bName) {
-            bookName.set(bName);
-        }
-
     }
 }
