@@ -18,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import providers.DoctorProvider;
 import services.NavigationService;
 
 public class ScreenOne {
@@ -76,13 +77,9 @@ public class ScreenOne {
 
     b2.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
       public void handle(ActionEvent ae) {
-        Connection con = null;
-        Statement stmt = null;
         try {
-          con = DriverManager.getConnection("jdbc:mysql://remotemysql.com:3306/6jf8B9VQl4", "6jf8B9VQl4", "T1a7u4LCMY");
-          stmt = con.createStatement();
-          ResultSet rs = stmt.executeQuery("SELECT * FROM Authors");
-
+          DoctorProvider dp = DoctorProvider.getInstance();
+          ResultSet rs = dp.fetchFromDatabse();
           data.clear();
           while (rs.next()) {
             System.out.println(rs.getString(1) + ":" + rs.getString(2));

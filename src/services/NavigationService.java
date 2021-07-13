@@ -13,8 +13,10 @@ public class NavigationService {
 
   private NavigationService() {
     primaryStage.setTitle("Digital Health Records");
+    //Temporary
     VBox root = new VBox();
     this.prevScreen = root;
+    //Simple screen
     Scene newscene = new Scene(root, 1280, 720);
     String css = this.getClass().getResource("customstyle.css").toExternalForm();
     newscene.getStylesheets().addAll(css);
@@ -43,7 +45,6 @@ public class NavigationService {
   public void goBack() {
     try {
       this.primaryStage.getScene().setRoot(this.prevScreen);
-
     } catch (Exception e) {
       System.out.println(e.toString());
     }
