@@ -8,15 +8,16 @@ import javafx.stage.Stage;
 
 public class NavigationService {
   private Stage primaryStage = new Stage();
-  private Parent prevScreen;
+  private PrevScreenStack prevScreen = new PrevScreenStack();
   private final static NavigationService INSTANCE = new NavigationService();
 
   private NavigationService() {
+
     primaryStage.setTitle("Digital Health Records");
-    //Temporary
+    // Temporary
     VBox root = new VBox();
-    this.prevScreen = root;
-    //Simple screen
+    prevScreen.push(root);
+    // Simple screen
     Scene newscene = new Scene(root, 1280, 720);
     String css = this.getClass().getResource("customstyle.css").toExternalForm();
     newscene.getStylesheets().addAll(css);
@@ -32,8 +33,8 @@ public class NavigationService {
     return this.primaryStage;
   }
 
-  public void switchToScreen(Parent node) {
-    this.prevScreen = this.primaryStage.getScene().getRoot();
+  public void pushScreen(Parent node) {
+    prevScreen.push(this.primaryStage.getScene().getRoot());
     try {
       this.primaryStage.getScene().setRoot(node);
 
@@ -42,11 +43,45 @@ public class NavigationService {
     }
   }
 
-  public void goBack() {
+  public void clearAllAndPush(Parent node) {
+    prevScreen.reset();
+    prevScreen.push(this.primaryStage.getScene().getRoot());
     try {
-      this.primaryStage.getScene().setRoot(this.prevScreen);
+      this.primaryStage.getScene().setRoot(node);
     } catch (Exception e) {
       System.out.println(e.toString());
+    }
+  }
+
+  public void popScreen() {
+    try {
+      this.primaryStage.getScene().setRoot(prevScreen.pop());
+    } catch (Exception e) {
+      System.out.println(e.toString());
+    }
+  }
+
+  private static class PrevScreenStack {
+    private int maxSize;
+    private int top;
+    private Parent[] prevScreen;
+
+    PrevScreenStack() {
+      maxSize = 10;
+      prevScreen = new Parent[maxSize];
+      top = -1;
+    }
+
+    void push(Parent node) {
+      prevScreen[++top] = node;
+    }
+
+    Parent pop() {
+      return prevScreen[top--];
+    }
+
+    void reset() {
+      top = -1;
     }
   }
 }
