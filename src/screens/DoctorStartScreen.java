@@ -13,52 +13,47 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import services.NavigationService;
 
-public class WelcomeScreen {
+public class DoctorStartScreen {
   VBox root = new VBox();
 
   public VBox display() {
 
     ImageView logoimgview = new ImageView("file:images/icon.png");
-    logoimgview.setFitHeight(300);
-    logoimgview.setFitWidth(300);
-    Label titleLabel = new Label("Digital Health Records App", logoimgview);
+    logoimgview.maxHeight(270);
+    logoimgview.maxWidth(270);
+    logoimgview.setFitHeight(270);
+    logoimgview.setFitWidth(270);
+    Label titleLabel = new Label("Doctors Start Screen", logoimgview);
     titleLabel.setFont(new Font(30.0));
     titleLabel.setContentDisplay(ContentDisplay.TOP);
 
-    ImageView docImg = new ImageView("file:images/doctors-welcome.png");
-    docImg.setFitHeight(180);
-    docImg.setPreserveRatio(true);
-    Button b1 = new Button();
-    b1.setPrefSize(180, 180);
-    b1.setPadding(new Insets(0));
-    b1.setGraphic(docImg);
-
-    ImageView patImg = new ImageView("file:images/patients-welcome.png");
-    patImg.setFitHeight(180);
-    patImg.setPreserveRatio(true);
-    Button b2 = new Button();
-    b2.setPrefSize(180, 180);
-    b2.setGraphic(patImg);
-    b2.setPadding(new Insets(0));
+    Button b1 = new Button("Login");
+    Button b2 = new Button("Registration");
+    Button b3 = new Button("Go Back");
 
     HBox btns = new HBox();
     btns.setAlignment(Pos.CENTER);
-    btns.setSpacing(150);
-    btns.maxHeight(180);
-
-    btns.getChildren().addAll(b1, b2);
+    btns.setSpacing(25);
+    btns.maxHeight(50);
+    btns.getChildren().addAll(b1, b2, b3);
 
     b1.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
       public void handle(ActionEvent ae) {
-        DoctorStartScreen ds = new DoctorStartScreen();
-        NavigationService.getInstance().pushScreen(ds.display());
+        DoctorLogin ls = new DoctorLogin();
+        NavigationService.getInstance().pushScreen(ls.display());
       }
     });
 
     b2.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
       public void handle(ActionEvent ae) {
-        PatientStartScreen ps = new PatientStartScreen();
-        NavigationService.getInstance().pushScreen(ps.display());
+        DoctorRegistration drs = new DoctorRegistration();
+        NavigationService.getInstance().pushScreen(drs.display());
+      }
+    });
+
+    b3.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+      public void handle(ActionEvent ae) {
+        NavigationService.getInstance().popScreen();
       }
     });
 
@@ -66,7 +61,7 @@ public class WelcomeScreen {
     this.root.setAlignment(Pos.CENTER);
 
     this.root.setPadding(new Insets(50, 25, 25, 50));
-    this.root.setSpacing(100);
+    this.root.setSpacing(30);
     return this.root;
   }
 }
