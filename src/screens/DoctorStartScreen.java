@@ -46,7 +46,7 @@ public class DoctorStartScreen {
 
     b2.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
       public void handle(ActionEvent ae) {
-        DoctorRegistration drs = new DoctorRegistration();
+        DoctorRegistrationOne drs = new DoctorRegistrationOne();
         NavigationService.getInstance().pushScreen(drs.display());
       }
     });

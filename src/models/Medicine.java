@@ -1,0 +1,5 @@
+package models;
+// MED_ID INT PRIMARY KEY AUTO_INCREMENT, NAME VARCHAR(255), COST INT, FOR_CONDITION VARCHAR(255));
+public class Medicine {
+  
+}

@@ -16,21 +16,24 @@ import javafx.scene.text.Text;
 import providers.DoctorProvider;
 import services.NavigationService;
 
-public class DoctorRegistration {
+public class DoctorRegistrationOne {
   VBox root;
-  String emailStr;
+  String usernameStr;
   String passwordStr;
 
   public VBox display() {
     this.root = new VBox();
     Text title = new Text("Doctor Registration");
     title.setFont(new Font(30.0));
+    Text subtitle = new Text(
+        "This is an access controlled registration, only authorized medical council personnel may enter the right credentials and continue.");
+    subtitle.setFont(new Font(21.0));
 
     // One field
     VBox subroot1 = new VBox();
-    Text t1 = new Text("Email");
-    TextField email = new TextField();
-    subroot1.getChildren().addAll(t1, email);
+    Text t1 = new Text("Username");
+    TextField username = new TextField();
+    subroot1.getChildren().addAll(t1, username);
     subroot1.setSpacing(10);
     subroot1.setMaxWidth(300);
     subroot1.setAlignment(Pos.TOP_LEFT);
@@ -45,7 +48,7 @@ public class DoctorRegistration {
 
     Separator separator = new Separator();
     separator.setPrefWidth(300);
-    Button b1 = new Button("Register");
+    Button b1 = new Button("Enter");
     Button b2 = new Button("Go Back");
 
     HBox btns = new HBox();
@@ -53,25 +56,28 @@ public class DoctorRegistration {
     btns.setSpacing(5);
     btns.maxHeight(50);
     btns.getChildren().addAll(b1, b2);
-    
+
     b1.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
       public void handle(ActionEvent ae) {
-        emailStr = email.getText().trim();
+        usernameStr = username.getText().trim();
         passwordStr = password.getText().trim();
-        if (emailStr.isEmpty()) {
-          showAlertMessage(Alert.AlertType.ERROR, "Email Required!", "Please enter your email");
+        if (usernameStr.isEmpty()) {
+          showAlertMessage(Alert.AlertType.ERROR, "Username Required!", "Please enter your username");
           return;
         }
         if (passwordStr.isEmpty()) {
           showAlertMessage(Alert.AlertType.ERROR, "Password Required!", "Please enter your password");
           return;
         }
-        showAlertMessage(Alert.AlertType.INFORMATION, "Details sent to database!",
-            "Username and password have been sent to database for validation");
+        // showAlertMessage(Alert.AlertType.INFORMATION, "Details sent to database!",
+        // "Username and password have been sent to database for validation");
 
-        if (!DoctorProvider.getInstance().doctorLogin(emailStr, passwordStr)) {
-          showAlertMessage(Alert.AlertType.ERROR, "Login Failed!", "Invalid credentials");
+        if (!DoctorProvider.getInstance().medicAssnCreds(usernameStr, passwordStr)) {
+          showAlertMessage(Alert.AlertType.ERROR, "Login Failed!", "Invalid credentials, you are not authorized.");
           return;
+        } else {
+          username.clear();
+          password.clear();
         }
       }
     });
