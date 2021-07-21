@@ -174,8 +174,8 @@ public final class DoctorProvider {
               resultSet.getString(4), resultSet.getString(5), resultSet.getInt(6), resultSet.getString(7),
               resultSet.getString(8), resultSet.getString(9));
           setUser(du);
-          DoctorDashboard dds = new DoctorDashboard();
-          NavigationService.getInstance().clearAllAndPush(dds.display());
+          // DoctorDashboard dds = new DoctorDashboard();
+          // NavigationService.getInstance().clearAllAndPush(dds.display());
           return true;
         }
       }

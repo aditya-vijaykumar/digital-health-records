@@ -5,23 +5,16 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import models.Doctor;
-import models.HealthRecord;
 import providers.DoctorProvider;
-import screens.components.DoctorsMenuBar;
 import services.NavigationService;
 
 public class DViewProfile {
-  private HealthRecord record;
-  private String patientName;
-  private String patientId;
 
   public VBox display() {
     VBox root = new VBox();
