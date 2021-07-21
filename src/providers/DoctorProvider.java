@@ -3,6 +3,8 @@ package providers;
 import java.sql.*;
 
 import models.Doctor;
+import models.HealthRecord;
+import models.Patient;
 import screens.DoctorDashboard;
 import screens.DoctorRegistrationTwo;
 import screens.WelcomeScreen;
@@ -67,7 +69,7 @@ public final class DoctorProvider {
               resultSet.getString(8), resultSet.getString(9));
           setUser(du);
           DoctorDashboard dds = new DoctorDashboard();
-          NavigationService.getInstance().pushScreen(dds.display());
+          NavigationService.getInstance().clearAllAndPush(dds.display());
           return true;
         } else {
           return false;
@@ -138,6 +140,85 @@ public final class DoctorProvider {
         if (res > 0) {
           System.out.println("Successfully registered a new doctor's acccount");
           return true;
+        }
+      }
+    } catch (SQLException e) {
+      // print SQL exception information
+      printSQLException(e);
+    }
+    return false;
+  }
+
+  public boolean updateProfile(Doctor newAccount) {
+    String UPDATE_QUERY = "UPDATE DOCTORS SET QUALIFICATIONS = ?,  AGE = ? , GENDER = ? , SPECIALIZATION = ?, ABOUT = ?  WHERE MLICENSE = ?";
+    try (PreparedStatement preparedStatement = JDBCService.getInstance().getConnection()
+        .prepareStatement(UPDATE_QUERY)) {
+      preparedStatement.setString(1, newAccount.getQuali());
+      preparedStatement.setInt(2, newAccount.getAge());
+      preparedStatement.setString(3, newAccount.getGender());
+      preparedStatement.setString(4, newAccount.getSpclzn());
+      preparedStatement.setString(5, newAccount.getAbout());
+      preparedStatement.setString(6, user.getMLicense());
+      System.out.println(preparedStatement);
+      int rslt = preparedStatement.executeUpdate();
+      if (rslt > 0) {
+        System.out.println("Successfully updated acccount");
+        //update the dctor variable
+        String SELECT_QUERY = "SELECT * FROM DOCTORS WHERE email = ?";
+        PreparedStatement prptStmt = JDBCService.getInstance().getConnection().prepareStatement(SELECT_QUERY);
+        prptStmt.setString(1, user.getEmail());
+        System.out.println(prptStmt);
+        ResultSet resultSet = prptStmt.executeQuery();
+        if (resultSet.next()) {
+          Doctor du = new Doctor(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3),
+              resultSet.getString(4), resultSet.getString(5), resultSet.getInt(6), resultSet.getString(7),
+              resultSet.getString(8), resultSet.getString(9));
+          setUser(du);
+          DoctorDashboard dds = new DoctorDashboard();
+          NavigationService.getInstance().clearAllAndPush(dds.display());
+          return true;
+        }
+      }
+    } catch (SQLException e) {
+      // print SQL exception information
+      printSQLException(e);
+    }
+    return false;
+  }
+
+  public boolean createNewHealthRecord(Patient thePatient, HealthRecord newRecord) {
+    String INSERT_QUERY = "INSERT INTO HEALTH_RECORDS(CREATE_DATE, SYMPTOMS, MED_CONDITION, DIAGNOSIS, MEDICATION) VALUES(?, ?, ?, ?, ?)";
+    try (PreparedStatement preparedStatement = JDBCService.getInstance().getConnection()
+        .prepareStatement(INSERT_QUERY)) {
+      preparedStatement.setString(1, newRecord.getCreateDate());
+      preparedStatement.setString(2, newRecord.getSymptoms());
+      preparedStatement.setString(3, newRecord.getMedCondtn());
+      preparedStatement.setString(4, newRecord.getDiagnosis());
+      preparedStatement.setString(5, newRecord.getMedication());
+      System.out.println(preparedStatement);
+      int rslt = preparedStatement.executeUpdate();
+      if (rslt > 0) {
+        String SELECT_QUERY = "SELECT MAX(RECORD_NO) FROM HEALTH_RECORDS";
+        PreparedStatement prpdStmtTwo = JDBCService.getInstance().getConnection().prepareStatement(SELECT_QUERY);
+        // prpdStmtTwo.setString(1, newRecord.getCreateDate());
+        // prpdStmtTwo.setString(2, newRecord.getSymptoms());
+        // prpdStmtTwo.setString(3, newRecord.getDiagnosis());
+        // prpdStmtTwo.setString(4, newRecord.getMedication());
+        System.out.println(prpdStmtTwo);
+        ResultSet res = prpdStmtTwo.executeQuery();
+        if (res.next()) {
+          int hr_id = res.getInt(1);
+          String INSERT_QUERY2 = "INSERT INTO CONSULTATIONS VALUES(?, ?, ?, ?)";
+          PreparedStatement prpdStmtThree = JDBCService.getInstance().getConnection().prepareStatement(INSERT_QUERY2);
+          prpdStmtThree.setString(1, this.user.getMLicense());
+          prpdStmtThree.setInt(2, thePatient.getPatientID());
+          prpdStmtThree.setInt(3, hr_id);
+          prpdStmtThree.setString(4, newRecord.getCreateDate());
+          int rslt2 = prpdStmtThree.executeUpdate();
+          if (rslt2 > 0) {
+            System.out.println("Successfully created the health record");
+            return true;
+          }
         }
       }
     } catch (SQLException e) {
