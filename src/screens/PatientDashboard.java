@@ -13,12 +13,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import providers.PatientProvider;
 import screens.components.PatientsMenuBar;
+import services.NavigationService;
 
 public class PatientDashboard {
   VBox root;
+  VBox parentRoot;
 
   public VBox display() {
     this.root = new VBox();
+    this.parentRoot = new VBox();
     MenuBar menuBar = PatientsMenuBar.getMenuBar();
 
     Text title = new Text("Patient's Dashboard - Hello " + PatientProvider.getInstance().getPatient().getName());
@@ -40,29 +43,47 @@ public class PatientDashboard {
     b2.setGraphic(patImg);
     b2.setPadding(new Insets(0));
 
+    ImageView medImg = new ImageView("file:images/meds.png");
+    medImg.setFitHeight(180);
+    medImg.setPreserveRatio(true);
+    Button b3 = new Button();
+    b3.setPrefSize(180, 180);
+    b3.setGraphic(medImg);
+    b3.setPadding(new Insets(0));
+
     HBox btns = new HBox();
     btns.setAlignment(Pos.CENTER);
     btns.setSpacing(150);
     btns.maxHeight(180);
 
-    btns.getChildren().addAll(b1, b2);
+    btns.getChildren().addAll(b1, b2, b3);
 
     b1.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
       public void handle(ActionEvent ae) {
-        // TODO:
+        PSearchDoctor psd = new PSearchDoctor();
+        NavigationService.getInstance().pushScreen(psd.display());
       }
     });
 
     b2.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
       public void handle(ActionEvent ae) {
-        // TODO:
+        PFindRecords pfr = new PFindRecords();
+        NavigationService.getInstance().pushScreen(pfr.display());
+      }
+    });
+
+    b3.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+      public void handle(ActionEvent ae) {
+        PSearchMedicines psm = new PSearchMedicines();
+        NavigationService.getInstance().pushScreen(psm.display());
       }
     });
 
     this.root.setAlignment(Pos.TOP_CENTER);
-    this.root.setPadding(new Insets(0, 25, 25, 50));
+    this.root.setPadding(new Insets(50, 25, 25, 50));
     this.root.setSpacing(30);
-    this.root.getChildren().addAll(menuBar, title, btns);
-    return this.root;
+    this.root.getChildren().addAll(title, btns);
+    this.parentRoot.getChildren().addAll(menuBar, this.root);
+    return this.parentRoot;
   }
 }

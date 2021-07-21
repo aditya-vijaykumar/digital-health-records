@@ -123,6 +123,47 @@ public final class PatientProvider {
     return false;
   }
 
+  public boolean updateProfile(Patient newAccount) {
+    String UPDATE_QUERY = "UPDATE PATIENTS SET FNAME = ?, LNAME = ?, BLOOD_GROUP = ?, GENDER = ?, AGE = ?, HEIGHT = ?, WEIGHT = ?, ALLERGIES = ? WHERE PATIENT_ID = ?";
+    try (PreparedStatement preparedStatement = JDBCService.getInstance().getConnection()
+        .prepareStatement(UPDATE_QUERY)) {
+      preparedStatement.setString(1, newAccount.getFName());
+      preparedStatement.setString(2, newAccount.getLName());
+      preparedStatement.setString(3, newAccount.getBloodGrp());
+      preparedStatement.setString(4, newAccount.getGender());
+      preparedStatement.setInt(5, newAccount.getAge());
+      preparedStatement.setInt(6, newAccount.getHeight());
+      preparedStatement.setInt(7, newAccount.getWeight());
+      preparedStatement.setString(8, newAccount.getAllergies());
+      preparedStatement.setInt(9, user.getPatientID());
+      System.out.println(preparedStatement);
+      int rslt = preparedStatement.executeUpdate();
+      if (rslt > 0) {
+        System.out.println("Successfully updated patient's acccount");
+        // update patient var
+        String SELECT_QUERY2 = "SELECT * FROM PATIENTS WHERE email = ?";
+        PreparedStatement prptStmt = JDBCService.getInstance().getConnection().prepareStatement(SELECT_QUERY2);
+        prptStmt.setString(1, user.getEmail());
+        System.out.println(prptStmt);
+        ResultSet resultSet = prptStmt.executeQuery();
+        if (resultSet.next()) {
+          Patient pu = new Patient(resultSet.getInt("PATIENT_ID"), resultSet.getString("FNAME"),
+              resultSet.getString("LNAME"), resultSet.getString("EMAIL"), resultSet.getString("BLOOD_GROUP"),
+              resultSet.getString("GENDER"), resultSet.getInt("AGE"), resultSet.getInt("HEIGHT"),
+              resultSet.getInt("WEIGHT"), resultSet.getString("ALLERGIES"));
+          setUser(pu);
+          // PatientDashboard pds = new PatientDashboard();
+          // NavigationService.getInstance().popScreen();
+          return true;
+        }
+      }
+    } catch (SQLException e) {
+      // print SQL exception information
+      printSQLException(e);
+    }
+    return false;
+  }
+
   public Patient[] findPatients(String email) {
     Patient[] searchResults = new Patient[10];
     int i = 0;
