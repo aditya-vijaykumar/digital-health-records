@@ -20,7 +20,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import models.Patient;
-import providers.DoctorProvider;
 import providers.PatientProvider;
 import services.NavigationService;
 

@@ -67,7 +67,7 @@ public final class PatientProvider {
           setUser(pu);
 
           PatientDashboard pds = new PatientDashboard();
-          NavigationService.getInstance().pushScreen(pds.display());
+          NavigationService.getInstance().clearAllAndPush(pds.display());
           return true;
         }
       }
@@ -121,6 +121,49 @@ public final class PatientProvider {
       printSQLException(e);
     }
     return false;
+  }
+
+  public Patient[] findPatients(String email) {
+    Patient[] searchResults = new Patient[10];
+    int i = 0;
+    String SELECT_QUERY = "SELECT * FROM PATIENTS WHERE email LIKE ?";
+    String subString = "%" + email + "%";
+    try (PreparedStatement preparedStatement = JDBCService.getInstance().getConnection()
+        .prepareStatement(SELECT_QUERY)) {
+      preparedStatement.setString(1, subString);
+      ResultSet resultSet = preparedStatement.executeQuery();
+      while (resultSet.next() && i <= 10) {
+        Patient pu = new Patient(resultSet.getInt("PATIENT_ID"), resultSet.getString("FNAME"),
+            resultSet.getString("LNAME"), resultSet.getString("EMAIL"), resultSet.getString("BLOOD_GROUP"),
+            resultSet.getString("GENDER"), resultSet.getInt("AGE"), resultSet.getInt("HEIGHT"),
+            resultSet.getInt("WEIGHT"), resultSet.getString("ALLERGIES"));
+        searchResults[i++] = pu;
+      }
+    } catch (SQLException e) {
+      // print SQL exception information
+      printSQLException(e);
+    }
+    return searchResults;
+  }
+
+  public Patient findPatient(String email) {
+    String SELECT_QUERY = "SELECT * FROM PATIENTS WHERE email = ?";
+    try (PreparedStatement preparedStatement = JDBCService.getInstance().getConnection()
+        .prepareStatement(SELECT_QUERY)) {
+      preparedStatement.setString(1, email);
+      ResultSet resultSet = preparedStatement.executeQuery();
+      while (resultSet.next()) {
+        Patient pu = new Patient(resultSet.getInt("PATIENT_ID"), resultSet.getString("FNAME"),
+            resultSet.getString("LNAME"), resultSet.getString("EMAIL"), resultSet.getString("BLOOD_GROUP"),
+            resultSet.getString("GENDER"), resultSet.getInt("AGE"), resultSet.getInt("HEIGHT"),
+            resultSet.getInt("WEIGHT"), resultSet.getString("ALLERGIES"));
+        return pu;
+      }
+    } catch (SQLException e) {
+      // print SQL exception information
+      printSQLException(e);
+    }
+    return null;
   }
 
 }
