@@ -6,26 +6,36 @@ public class Patient {
   private String lname;
   private String email;
   private String bloodGroup;
-  private String allergies;
-  private int weight;
-  private int height;
+  private String gender;
   private int age;
+  private int height;
+  private int weight;
+  private String allergies;
 
-  public Patient(int patientID, String fname, String lname, String email, String bloodGroup, String allergies, int weight,
-      int height, int age) {
+  public Patient(int patientID, String fname, String lname, String email, String bloodGroup, String gender, int age,
+      int height, int weight, String allergies) {
     this.patientID = patientID;
     this.fname = fname;
     this.lname = lname;
     this.email = email;
     this.bloodGroup = bloodGroup;
-    this.allergies = allergies;
-    this.weight = weight;
-    this.height = height;
+    this.gender = gender;
     this.age = age;
+    this.height = height;
+    this.weight = weight;
+    this.allergies = allergies;
   }
 
   public int getPatientID() {
     return this.patientID;
+  }
+
+  public String getFName() {
+    return this.fname;
+  }
+
+  public String getLName() {
+    return this.lname;
   }
 
   public String getName() {
@@ -40,8 +50,12 @@ public class Patient {
     return this.bloodGroup;
   }
 
-  public String getAllergies() {
-    return this.allergies;
+  public String getGender() {
+    return this.gender;
+  }
+
+  public int getAge() {
+    return this.age;
   }
 
   public int getHeight() {
@@ -52,7 +66,7 @@ public class Patient {
     return this.weight;
   }
 
-  public int getAge() {
-    return this.age;
+  public String getAllergies() {
+    return this.allergies;
   }
 }
