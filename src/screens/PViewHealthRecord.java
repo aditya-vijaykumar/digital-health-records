@@ -34,7 +34,7 @@ public class PViewHealthRecord {
     sideBarScroller.setFitToWidth(true);
     MenuBar menuBar = PatientsMenuBar.getMenuBar();
 
-    Text title = new Text("Create New Health Record");
+    Text title = new Text("Viewing Health Record");
     title.setFont(new Font(30.0));
     Text subtitle1 = new Text("Doctor Name : Dr. " + doctorName);
     subtitle1.setFont(new Font(18.0));

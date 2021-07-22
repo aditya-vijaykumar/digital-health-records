@@ -35,7 +35,7 @@ public class DViewHealthRecord {
     sideBarScroller.setFitToWidth(true);
     MenuBar menuBar = DoctorsMenuBar.getMenuBar();
 
-    Text title = new Text("Create New Health Record");
+    Text title = new Text("Viewing Health Record");
     title.setFont(new Font(30.0));
     Text subtitle1 = new Text("Patient Name : " + patientName);
     subtitle1.setFont(new Font(18.0));
